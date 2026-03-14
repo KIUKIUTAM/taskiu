@@ -1,0 +1,6 @@
+[submodule "taskiu-frontend"]
+	path = taskiu-frontend
+	url = git@github.com:KIUKIUTAM/taskiu-frontend.git
+[submodule "taskiu-backend"]
+	path = taskiu-backend
+	url = git@github.com:KIUKIUTAM/taskiu-backend.git
