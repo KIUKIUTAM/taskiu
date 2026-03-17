@@ -90,6 +90,6 @@ docker build \
 ```bash
 docker compose up -d --build
 ```
-
+bash deploy.sh 1.0.1
 ---
 *Built with ❤️ by Tam Tsz Kiu*
