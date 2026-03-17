@@ -73,10 +73,23 @@ taskiu/
 - Node.js 20+
 
 ### Run with Docker
+#frontend nginx
 ```bash
-docker-compose up -d
+docker build \
+  --build-arg REACT_APP_API_URL=http://your-api-server:8088/api \
+  --build-arg REACT_APP_ENV=production \
+  --build-arg BUILD_NUMBER=1.0.0 \
+  --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) \
+  --build-arg BUILD_DATE=$(date +%Y-%m-%dT%H:%M:%S) \
+  -t your-app-name:1.0.0 \
+  -t your-app-name:latest \
+  .
 ```
-Access the application at `http://localhost`.
+
+
+```bash
+docker compose up -d --build
+```
 
 ---
-*Built with ❤️ by [Your Name]*
+*Built with ❤️ by Tam Tsz Kiu*

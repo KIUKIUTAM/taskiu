@@ -5,6 +5,8 @@ networks:
     driver: bridge
   taskiu-backend-net:
     driver: bridge
+  taskiu-minio-net:
+    driver: bridge
 
 services:
   # ==================== 1. 資料層 (Data Layer) ====================
@@ -118,6 +120,7 @@ services:
     command: server /data --console-address ":9001"
     networks:
       - taskiu-backend-net
+      - taskiu-minio-net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
@@ -161,6 +164,7 @@ services:
       
       # MinIO
       - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_PUBLIC_ENDPOINT=https://tavinki.com/minio
       - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
       - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
@@ -217,7 +221,15 @@ services:
       start_period: 60s
 
   frontend:
-    build: ./taskiu-frontend
+    build:
+      context: ./taskiu-frontend
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
+        REACT_APP_ENV: ${REACT_APP_ENV}
+        BUILD_NUMBER: ${BUILD_NUMBER}
+        GIT_COMMIT: ${GIT_COMMIT}
+        BUILD_DATE: ${BUILD_DATE}
     container_name: taskiu-frontend
     restart: on-failure
     expose:
@@ -240,6 +252,7 @@ services:
       - backend
     networks:
       - taskiu-frontend-net
+      - taskiu-minio-net
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 10s
