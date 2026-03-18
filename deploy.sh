@@ -7,4 +7,5 @@ echo "   GIT_COMMIT  = $GIT_COMMIT"
 echo "   BUILD_DATE  = $BUILD_DATE"
 echo "   BUILD_NUMBER= $BUILD_NUMBER"
 
-docker compose up -d --build
+docker compose build --no-cache
+docker compose up -d
